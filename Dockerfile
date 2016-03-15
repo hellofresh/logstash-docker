@@ -52,6 +52,10 @@ RUN touch /tmp/inputfile.log && \
 # Copy runit scripts into place.
 COPY logstash_service.sh /etc/service/logstash/run
 
+# Fetch logstash-output-amazon_es plugin (which get's installed through an external process later on).
+RUN mkdir /tmp/plugin && \
+    wget https://github.com/hellofresh/logstash-output-amazon_es/releases/download/v0.3/logstash-output-amazon_es-0.3-java.gem -O /tmp/plugin/logstash-output-amazon_es-0.3-java.gem
+
 # Use baseimage-docker's init system.
 # Reference: https://github.com/phusion/baseimage-docker#using-baseimage-docker-as-base-image
 CMD ["/sbin/my_init"]
