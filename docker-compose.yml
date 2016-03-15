@@ -4,3 +4,5 @@ services:
   # Spawns a container with a logstash service inside which is supervised by runit.
   logstash:
     image: quay.io/hellofresh/logstash-docker:latest
+    container_name: logstash
+
