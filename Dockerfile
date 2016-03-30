@@ -59,3 +59,6 @@ RUN mkdir /tmp/plugin && \
 # Use baseimage-docker's init system.
 # Reference: https://github.com/phusion/baseimage-docker#using-baseimage-docker-as-base-image
 CMD ["/sbin/my_init"]
+
+# Allow Beat connections over TCP port 5044.
+EXPOSE 5044

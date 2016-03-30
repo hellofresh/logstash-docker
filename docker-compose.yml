@@ -3,6 +3,9 @@ version: '2'
 services:
   # Spawns a container with a logstash service inside which is supervised by runit.
   logstash:
-    image: quay.io/hellofresh/logstash-docker:wespi-0.1
+    image: quay.io/hellofresh/logstash-docker:wespi-0.2
     container_name: logstash
-
+    # AWS API Keys
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
