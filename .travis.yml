@@ -26,5 +26,5 @@ before_install:
 
 script:  
     - docker version
-    - run-container-test.sh
+    - ./run-container-test.sh
 
