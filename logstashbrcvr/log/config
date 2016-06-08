@@ -1,0 +1,4 @@
+# Config for svlogd (part of runit suite).
+
+# Set maximum file size to 100 MB.
+s104857600
