@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/hellofresh/logstash-docker.svg?branch=master)](https://travis-ci.org/hellofresh/logstash-docker)
+
+==============
+
 # logstash-docker
 Docker-ized Logstash service with runit supervision.
 
