@@ -1,0 +1,11 @@
+# Idea based on: https://github.com/tutumcloud/builder#testing
+
+version: '2'
+services:
+
+  # sut == service under test
+  sut:
+    build: .
+    image: quay.io/hellofresh/logstash-docker:2016-06-08
+    # Test command which is expected to finish with exit code 0.
+    command: /sbin/my_init -- container-test.sh
