@@ -62,3 +62,28 @@ CMD ["/sbin/my_init"]
 
 # Allow Beat connections over TCP port 5044.
 EXPOSE 5044
+
+################################################################################################
+# logstashbrcvr a.k.a. Logstash Heartbeat Receiver
+# Allows monitoring of Logstash functionality based on heartbeat input plugin [1]
+# in combination with a small Golang binary 'logstashbrcvr' [2].
+# [1] https://www.elastic.co/guide/en/logstash/current/plugins-inputs-heartbeat.html
+# [2] https://github.com/hellofresh/logstashbrcvr
+
+# - Create dedicated user to run the monitoring util binary,
+# - create log directory for logstashbrcvr,
+# - change ownership of log directory,
+# - fetch logstashbrcvr binary and put it into the right place,
+# - make logstashbrcvr executable.
+RUN adduser --system --no-create-home --shell /bin/false logstashbrcvr && \
+    mkdir /var/log/logstashbrcvr && \
+    chown logstashbrcvr:root /var/log/logstashbrcvr && \
+    cd /usr/local/bin && \
+    wget https://github.com/hellofresh/logstashbrcvr/releases/download/v0.0.1/logstashbrcvr.linux-x86-64 -O logstashbrcvr.linux && \
+    chmod +x logstashbrcvr.linux
+
+# Create runit service defintions for logstashbrcvr.
+COPY ./logstashbrcvr /etc/service/logstashbrcvr
+
+# Move logging configuration to right place.
+RUN mv /etc/service/logstashbrcvr/log/config /var/log/logstashbrcvr/config

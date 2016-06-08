@@ -1,0 +1,3 @@
+#!/bin/bash
+
+exec chpst -u logstashbrcvr svlogd /var/log/logstashbrcvr
