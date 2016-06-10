@@ -3,9 +3,27 @@ version: '2'
 services:
   # Spawns a container with a logstash service inside which is supervised by runit.
   logstash:
-    image: quay.io/hellofresh/logstash-docker:wespi-0.2
+    image: quay.io/hellofresh/logstash-docker:wespi-0.4
     container_name: logstash
-    # AWS API Keys
+    networks:
+      lognet:
+        aliases:
+         - logstash
+
+  consul:
+    image: consul:v0.6.4
+    ports:
+      # Bind Consul WebUI port to enable access to http://localhost:8500/ui
+      - "8500:8500"
+    networks:
+      lognet:
+        aliases:
+          - consul-server
     environment:
-      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      # Use the same pre-shared secret as the one in the Ansible consul role (key 'consul_encrypt' in consul/defaults/main.yml).
+      # Define Consul client address to bind to all IPs inside container to enable access to Consul WebUI from Docker host machine.
+      CONSUL_LOCAL_CONFIG: '{"encrypt": "Tq/xU3fTPyBRoA4R4CxOKg==", "client_addr": "0.0.0.0"}'
+
+networks:
+  lognet:
+    driver: bridge
