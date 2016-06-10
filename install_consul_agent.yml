@@ -5,6 +5,7 @@
 # Used components:
 # - Ansible Consul role: https://github.com/hellofresh/ansible-consul
 # - Official Consul Docker image (which plays the server part): https://hub.docker.com/_/consul/
+# - logstash-docker image: quay.io/hellofresh/logstash-docker:wespi-0.4
 #
 
 
