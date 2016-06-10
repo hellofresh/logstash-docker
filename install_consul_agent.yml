@@ -30,10 +30,11 @@
                              - "docker-env"
         port              : 5044
         check             : 
-            script        : "curl -s -XGET 'http://127.0.0.1:8080/mon'"
+            script        : "curl -s -XGET 'http://127.0.0.1:8080/mon' | grep -v 404"
             interval      : "15s"
         haproxy           :
           server_options  : "check inter 10s fastinter 5s downinter 8s rise 3 fall 2"
   
   roles:
     - { role: consul, tags: ["consul"] }
+
