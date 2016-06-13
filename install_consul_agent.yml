@@ -1,1 +1,42 @@
-/home/asemt/repos/automation/plays-test/install_consul_agent.yml
+---
+
+#
+# This is an Ansilbe test play to install a Consul agent in a Docker container which already provides a logstash service.
+# Used components:
+# - Ansible Consul role: https://github.com/hellofresh/ansible-consul
+# - Official Consul Docker image (which plays the server part): https://hub.docker.com/_/consul/
+# - logstash-docker image: quay.io/hellofresh/logstash-docker:wespi-0.4
+#
+
+
+- name: Install Consul agent for a producer service.
+  # MUST match a running Docker container named 'logstash'.
+  hosts: logstash
+  connection: docker
+  gather_facts: True
+
+  vars:
+    # 'consul-server' is defined as a network alias in the docker-compose.yml file.
+    consul_start_join           : [ "consul-server" ]
+    # 'dc1' is the default value from the official Consul Docker image.
+    consul_datacenter           : "dc1"
+    consul_producer             : True
+    consul_producer_services    : [ 'logstash' ]
+
+    consul_services       :
+      logstash            :
+        name              : "logstash"
+        tags              : 
+                             - "logstash"
+                             - "docker-env"
+        port              : 5044
+        check             : 
+            script        : "curl -s -XGET 'http://127.0.0.1:8080/mon' | grep -v 404"
+            interval      : "15s"
+        haproxy           :
+          server_options  : "check inter 10s fastinter 5s downinter 8s rise 3 fall 2"
+          service_mode    : "tcp"
+  
+  roles:
+    - { role: consul, tags: ["consul"] }
+
