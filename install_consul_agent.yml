@@ -34,6 +34,7 @@
             interval      : "15s"
         haproxy           :
           server_options  : "check inter 10s fastinter 5s downinter 8s rise 3 fall 2"
+          service_mode    : "tcp"
   
   roles:
     - { role: consul, tags: ["consul"] }
