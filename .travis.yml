@@ -29,6 +29,8 @@ before_install:
     - chmod +x docker-compose
     - sudo mv docker-compose /usr/local/bin
 
+    # Fetch Docker image under test. Seems not be working with Ruby Gem docker-api as defined in 'test/rspec-based/spec/default_spec.rb'.
+    - docker pull quay.io/hellofresh/logstash-docker:wespi-0.4
     # Install serverspec and dependencies
     - cd test/rspec-based
     - bundle install --path ./vendor/bundle
