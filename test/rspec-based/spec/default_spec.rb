@@ -38,7 +38,8 @@ describe "Dockerfile" do
     it { should be_executable }
   end
 
-  describe command('sv check logstash') do
+  # Give logstash service some time to spin up.
+  describe command('sleep 30 && sv check logstash') do
     its(:exit_status) { should eq 0 }
   end
 
@@ -54,8 +55,7 @@ describe "Dockerfile" do
     its(:stdout) { should match(/ok: run: logstashbrcvr/) }
   end
 
-  # Give logstash service some time to spin up.
-  describe command('sleep 30 && curl -s -XGET http://127.0.0.1:8080/mon') do
+  describe command('curl -s -XGET http://127.0.0.1:8080/mon') do
     its(:stdout) { should match(/{"status": "ok"}/) }
   end
 
