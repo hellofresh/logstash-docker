@@ -1,30 +1,15 @@
-# Shamelessly copied from (and slightly adapted): http://graysonkoonce.com/managing-docker-and-docker-compose-versions-on-travis-ci/
-
+# Shamelessly copied from (and slightly adapted): https://github.com/smartb-energy/docker-python/blob/master/.travis.yml
 
 sudo: required
+
+language: ruby
 
 services:  
     - docker
 
-env:  
-    global:
-        - DOCKER_VERSION=1.11.2-0~trusty
-        - DOCKER_COMPOSE_VERSION=1.7.1
-
 before_install:  
-    # list docker-engine versions
-    - apt-cache madison docker-engine
-
-    # upgrade docker-engine to specific version
-    - sudo apt-get -o Dpkg::Options::="--force-confnew" install -y docker-engine=${DOCKER_VERSION}
-
-    # reinstall docker-compose at specific version
-    - sudo rm /usr/local/bin/docker-compose
-    - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-    - chmod +x docker-compose
-    - sudo mv docker-compose /usr/local/bin
+    - cd test/rspec-based
+    - bundle install --path ./vendor/bundle
 
 script:  
-    - docker version
-    - ./run-container-test.sh
-
+    - bundle exec rspec
