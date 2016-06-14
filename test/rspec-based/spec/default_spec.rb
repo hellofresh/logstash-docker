@@ -4,9 +4,13 @@
 
 require 'spec_helper'
 
+# Tag of the image to use for tests.
+IMAGE_TAG = 'wespi-0.4'
+
+
 describe "Dockerfile" do
   before(:all) do
-    image = Docker::Image.create(fromImage: 'quay.io/hellofresh/logstash-docker', tag: 'wespi-0.4') do |v|
+    image = Docker::Image.create(fromImage: "quay.io/hellofresh/logstash-docker:#{IMAGE_TAG}") do |v|
       if (log = JSON.parse(v)) && log.has_key?("stream")
         $stdout.puts log["stream"]
       end
