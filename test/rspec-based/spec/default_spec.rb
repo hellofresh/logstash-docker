@@ -63,4 +63,13 @@ describe "Dockerfile" do
     its(:stdout) { should match(/{"status": "ok"}/) }
   end
 
+  # Test the negative case.
+  # Expectation: If the logstash service stops functioning,
+  # the logstashbrcvr service should give a 404 HTTP status code.
+  `sv stop logstash && sleep 10`
+
+  describe command('curl -s -XGET http://127.0.0.1:8080/mon') do
+    its(:stdout) { should contain('404') }
+  end
+
 end
