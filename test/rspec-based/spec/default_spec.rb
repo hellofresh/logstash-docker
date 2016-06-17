@@ -72,4 +72,36 @@ describe "Dockerfile" do
     its(:stdout) { should contain('404') }
   end
 
+  #
+  # Consul.io agent
+  #
+
+  describe file('/var/consul/data') do
+    it { should be_directory }
+  end
+
+  describe file('/etc/consul.d') do
+    it { should be_directory }
+  end
+
+  describe file('/etc/service/consul') do
+    it { should be_directory }
+  end
+
+  describe file('/etc/service/consul/run') do
+    it { should be_executable }
+  end
+
+  describe file('/etc/service/consul/final') do
+    it { should be_executable }
+  end
+
+  describe command('sv check consul') do
+    its(:exit_status) { should eq 0 }
+  end
+
+  describe port(8500) do
+    it { should be_listening }
+  end
+
 end

@@ -1,0 +1,18 @@
+{ 
+"service": {
+    "check": {
+        "interval": "15s", 
+        "script": "curl -s -XGET 'http://127.0.0.1:8080/mon' | grep -v 404"
+    },
+    "haproxy": {
+      "server_options": "check inter 10s fastinter 5s downinter 8s rise 3 fall 2", 
+      "service_mode": "tcp"
+    }, 
+    "name": "logstash", 
+    "port": 5044, 
+    "tags": [
+        "logstash", 
+        "docker-env"
+    ]
+}
+}

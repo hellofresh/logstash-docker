@@ -33,7 +33,7 @@ RUN echo "deb http://packages.elasticsearch.org/logstash/${LOGSTASH_MAJOR}/debia
 
 RUN set -x \
   && apt-get update \
-  && apt-get install -y --no-install-recommends logstash=$LOGSTASH_VERSION
+  && apt-get install -y --no-install-recommends logstash=$LOGSTASH_VERSION unzip
 
 # Update PATH to include Logstash binaries.
 ENV PATH=${PATH}:/opt/logstash/bin
@@ -88,3 +88,33 @@ COPY ./logstashbrcvr /etc/service/logstashbrcvr
 # Move logging configuration to right place.
 RUN mv /etc/service/logstashbrcvr/log/config /var/log/logstashbrcvr/config
 
+#########
+#
+#  Consul (agent)
+#
+#########
+
+# Fetch consul binary.
+RUN wget -O /usr/local/bin/consul_0.6.4_linux_amd64.zip https://releases.hashicorp.com/consul/0.6.4/consul_0.6.4_linux_amd64.zip && \
+    cd /usr/local/bin && \
+    unzip /usr/local/bin/consul_0.6.4_linux_amd64.zip && \
+    chmod +x /usr/local/bin/consul && \
+    rm /usr/local/bin/consul_0.6.4_linux_amd64.zip
+
+# Create consul data dir.
+RUN mkdir -p /var/consul/data
+
+# Copy supervise run scripts into place.
+COPY consul_service.sh /etc/service/consul/run
+
+# Copy supervise final script into place.
+COPY consul_service_final.sh /etc/service/consul/final
+
+# Add configuration directory for Consul services.
+RUN mkdir /etc/consul.d
+
+# Expose Consul WebUI, HTTP, RPC, DNS endpoints.
+EXPOSE 8500
+
+# Consul agent configuration volume.
+VOLUME ["/etc/consul.d"]

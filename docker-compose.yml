@@ -3,12 +3,18 @@ version: '2'
 services:
   # Spawns a container with a logstash service inside which is supervised by runit.
   logstash:
-    image: quay.io/hellofresh/logstash-docker:wespi-0.4
+#    image: quay.io/hellofresh/logstash-docker:wespi-0.4
+    image: my/logstash-docker:2016-06-17
     container_name: logstash
     networks:
       lognet:
         aliases:
          - logstash
+    environment:
+      CONSUL_START_JOIN: 'consul-server'
+      CONSUL_ENCRYPT: 'Tq/xU3fTPyBRoA4R4CxOKg=='
+    volumes:
+      - ./service-config:/etc/consul.d
 
   consul:
     image: consul:v0.6.4
