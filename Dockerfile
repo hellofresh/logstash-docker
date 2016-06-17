@@ -88,8 +88,3 @@ COPY ./logstashbrcvr /etc/service/logstashbrcvr
 # Move logging configuration to right place.
 RUN mv /etc/service/logstashbrcvr/log/config /var/log/logstashbrcvr/config
 
-###########################################
-# Container Test based on tutum/builder [1]
-# [1] https://github.com/tutumcloud/builder
-
-COPY ./test/container-test.sh /usr/local/bin/container-test.sh
