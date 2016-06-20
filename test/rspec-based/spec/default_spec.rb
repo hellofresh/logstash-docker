@@ -26,7 +26,7 @@ describe 'docker-compose.yml run' do
   end
 
   # Give logstash service some time to spin up.
-  describe command('sleep 45 && sv check logstash') do
+  describe command('sleep 30 && sv check logstash') do
     its(:exit_status) { should eq 0 }
   end
 
@@ -42,7 +42,8 @@ describe 'docker-compose.yml run' do
     its(:stdout) { should match(/ok: run: logstashbrcvr/) }
   end
 
-  describe command('curl -s -XGET http://127.0.0.1:8080/mon') do
+  # Heartbeats arive in intervals of 10 seconds, so we have to wait a little before querying.
+  describe command('sleep 15 && curl -s -XGET http://127.0.0.1:8080/mon') do
     its(:stdout) { should match(/{"status": "ok"}/) }
   end
 
