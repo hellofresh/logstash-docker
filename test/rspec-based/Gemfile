@@ -1,4 +1,4 @@
 source "https://rubygems.org"
 
-gem 'docker-api'
+gem 'specinfra-backend-docker_compose', '~> 0.1.0'
 gem 'serverspec'

@@ -4,36 +4,19 @@
 
 require 'spec_helper'
 
-# Tag of the image to use for tests.
-IMAGE_TAG = 'wespi-0.4'
 
+describe 'docker-compose.yml run' do
 
-describe "Dockerfile" do
-  before(:all) do
-    image = Docker::Image.create(fromImage: "quay.io/hellofresh/logstash-docker:#{IMAGE_TAG}") do |v|
-      if (log = JSON.parse(v)) && log.has_key?("stream")
-        $stdout.puts log["stream"]
-      end
-    end
-
-    set :os, family: :debian
-    set :backend, :docker
-    set :docker_image, image.id
-
-  end
-
-  # after(:all) do
-  #   image.remove(:force => true)
-  # end
-
+  #
+  #  Single container tests.
+  #
 
   describe file('/opt/logstash') do
     it { should be_directory }
   end
 
-  #
   # Check runit service definitions:
-  #
+
   describe file('/etc/service/logstash') do
     it { should be_executable }
   end
@@ -72,9 +55,7 @@ describe "Dockerfile" do
     its(:stdout) { should contain('404') }
   end
 
-  #
   # Consul.io agent
-  #
 
   describe file('/var/consul/data') do
     it { should be_directory }
@@ -92,7 +73,7 @@ describe "Dockerfile" do
     it { should be_executable }
   end
 
-  describe file('/etc/service/consul/final') do
+  describe file('/etc/service/consul/finish') do
     it { should be_executable }
   end
 
@@ -100,8 +81,19 @@ describe "Dockerfile" do
     its(:exit_status) { should eq 0 }
   end
 
-  describe port(8500) do
-    it { should be_listening }
+  #
+  #  Integration tests.
+  #
+
+  # Is the logstash service registered in the Consul service catalog?
+  describe command('sleep 15 && curl -s --fail -XGET http://consul-server:8500/v1/catalog/service/logstash') do
+    its(:exit_status) { should_not eq 22 }
   end
 
-end
+
+  # Is the logstash service registered in the Consul service catalog with the defined port from /etc/consul.d/logstash.json?
+  describe command('curl -s -XGET http://consul-server:8500/v1/catalog/service/logstash | jq -c ".[0] | {LogstashPort: .ServicePort}"') do
+    its(:stdout) { should match(/{"LogstashPort":5044}/) }
+  end
+
+end # describe 'docker-compose.yml run' do
