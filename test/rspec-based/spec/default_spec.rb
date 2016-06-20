@@ -26,7 +26,7 @@ describe 'docker-compose.yml run' do
   end
 
   # Give logstash service some time to spin up.
-  describe command('sleep 30 && sv check logstash') do
+  describe command('sleep 45 && sv check logstash') do
     its(:exit_status) { should eq 0 }
   end
 
@@ -89,7 +89,6 @@ describe 'docker-compose.yml run' do
   describe command('sleep 15 && curl -s --fail -XGET http://consul-server:8500/v1/catalog/service/logstash') do
     its(:exit_status) { should_not eq 22 }
   end
-
 
   # Is the logstash service registered in the Consul service catalog with the defined port from /etc/consul.d/logstash.json?
   describe command('curl -s -XGET http://consul-server:8500/v1/catalog/service/logstash | jq -c ".[0] | {LogstashPort: .ServicePort}"') do
