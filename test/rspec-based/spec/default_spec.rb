@@ -87,7 +87,7 @@ describe 'docker-compose.yml run' do
   #
 
   # Is the logstash service registered in the Consul service catalog?
-  describe command('sleep 15 && curl -s --fail -XGET http://consul-server:8500/v1/catalog/service/logstash') do
+  describe command('sleep 30 && curl -s --fail -XGET http://consul-server:8500/v1/catalog/service/logstash') do
     its(:exit_status) { should_not eq 22 }
   end
 
