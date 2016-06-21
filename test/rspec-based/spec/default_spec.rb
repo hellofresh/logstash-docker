@@ -43,7 +43,7 @@ describe 'docker-compose.yml run' do
   end
 
   # Heartbeats arive in intervals of 10 seconds, so we have to wait a little before querying.
-  describe command('sleep 15 && curl -s -XGET http://127.0.0.1:8080/mon') do
+  describe command('sleep 25 && curl -s -XGET http://127.0.0.1:8080/mon') do
     its(:stdout) { should match(/{"status": "ok"}/) }
   end
 
