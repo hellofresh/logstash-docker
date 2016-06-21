@@ -1,4 +1,4 @@
-FROM quay.io/hellofresh/hf-javaimage
+FROM quay.io/hellofresh/logstash-docker:wespi-0.1.0
 
 #
 # Install Logstash 2.2
