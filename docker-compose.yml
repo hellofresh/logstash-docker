@@ -11,6 +11,7 @@ services:
          - logstash
     environment:
       CONSUL_START_JOIN: 'consul-server'
+      CONSUL_DATACENTER: 'dc1'
       CONSUL_ENCRYPT: 'Tq/xU3fTPyBRoA4R4CxOKg=='
       CONSUL_SERVICE_CONFIG: '{ 
         "service": {
