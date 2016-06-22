@@ -11,11 +11,11 @@ CMD ["/sbin/my_init"]
 #########
 
 # Fetch consul binary.
-RUN wget -O /usr/local/bin/consul_0.6.4_linux_amd64.zip https://releases.hashicorp.com/consul/0.6.4/consul_0.6.4_linux_amd64.zip && \
+RUN wget -O /usr/local/bin/consul_0.6.3_linux_amd64.zip https://releases.hashicorp.com/consul/0.6.3/consul_0.6.3_linux_amd64.zip && \
     cd /usr/local/bin && \
-    unzip /usr/local/bin/consul_0.6.4_linux_amd64.zip && \
+    unzip /usr/local/bin/consul_0.6.3_linux_amd64.zip && \
     chmod +x /usr/local/bin/consul && \
-    rm /usr/local/bin/consul_0.6.4_linux_amd64.zip
+    rm /usr/local/bin/consul_0.6.3_linux_amd64.zip
 
 # Create consul data dir.
 RUN mkdir -p /var/consul/data
