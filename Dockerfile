@@ -1,4 +1,4 @@
-FROM quay.io/hellofresh/logstash-docker:wespi-0.1.0
+FROM quay.io/hellofresh/logstash-docker:wespi-0.3.0
 
 # Use baseimage-docker's init system.
 # Reference: https://github.com/phusion/baseimage-docker#using-baseimage-docker-as-base-image
@@ -29,8 +29,9 @@ COPY consul_service_final.sh /etc/service/consul/finish
 # Add configuration directory for Consul services.
 RUN mkdir /etc/consul.d
 
-# Expose Consul WebUI, HTTP, RPC, DNS endpoints.
+# Expose Consul HTTP and Serf LAN ports.
 EXPOSE 8500
+EXPOSE 8301
 
 # Consul agent configuration volume.
 # Do not use a volume here because it is not working with the serverspec driver 
