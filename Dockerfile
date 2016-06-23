@@ -24,7 +24,7 @@ RUN mkdir -p /var/consul/data
 COPY consul_service.sh /etc/service/consul/run
 
 # Copy supervise final script into place.
-COPY consul_service_final.sh /etc/service/consul/finish
+COPY consul_service_finish.sh /etc/service/consul/finish
 
 # Add configuration directory for Consul services.
 RUN mkdir /etc/consul.d
