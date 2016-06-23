@@ -1,5 +1,4 @@
 #!/bin/bash
 
-# Gracefully leave the cluster and shutdown the client.
-# Reference: https://www.consul.io/docs/commands/leave.html
-/usr/local/bin/consul leave
+# Transition from "failed" to "left" state to prevent reconnects for 72h (as per default).
+curl -XGET "http://consul-server:8500/v1/agent/force-leave/$HOSTNAME"
