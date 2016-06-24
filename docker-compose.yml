@@ -27,6 +27,7 @@ services:
             ]
         }
         }'
+      CONSUL_BIND_PRIVATE_IP: "0.0.0.0"
     # This redundant definition is necessary for docker-compose-api used in specinfra-backend-docker_compose
     # to make the hostname resolution in the integration tests work.
     links:
