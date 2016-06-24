@@ -3,7 +3,7 @@ version: '2'
 services:
   # Spawns a container with a logstash service inside which is supervised by runit.
   logstash:
-    image: quay.io/hellofresh/logstash-docker:wespi-0.3.1
+    image: quay.io/hellofresh/logstash-docker:wespi-0.3.3
     container_name: logstash
     networks:
       lognet:
