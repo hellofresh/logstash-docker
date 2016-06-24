@@ -43,16 +43,18 @@ describe 'docker-compose.yml run' do
   end
 
   # Heartbeats arive in intervals of 10 seconds, so we have to wait a little before querying.
-  describe command('sleep 25 && curl -s -XGET http://127.0.0.1:8080/mon') do
+  describe command('sleep 30 && curl -s -XGET http://127.0.0.1:8080/mon') do
     its(:stdout) { should match(/{"status": "ok"}/) }
   end
 
   # Test the negative case.
   # Expectation: If the logstash service stops functioning,
   # the logstashbrcvr service should give a 404 HTTP status code.
-  `sv stop logstash && sleep 10`
+  describe command('sv stop logstash') do
+    its(:exit_status) { should eq 0 }
+  end
 
-  describe command('curl -s -XGET http://127.0.0.1:8080/mon') do
+  describe command('sleep 20 && curl -s -XGET http://127.0.0.1:8080/mon') do
     its(:stdout) { should contain('404') }
   end
 
@@ -95,5 +97,17 @@ describe 'docker-compose.yml run' do
   describe command('curl -s -XGET http://consul-server:8500/v1/catalog/service/logstash | jq -c ".[0] | {LogstashPort: .ServicePort}"') do
     its(:stdout) { should match(/{"LogstashPort":5044}/) }
   end
+
+  # Stop the consul agent. This executes '/etc/service/consul/finish' which calls the Consul HTTP API to indicate a force-leave of the agent node.
+  # system("sv stop consul")
+  describe command('sv stop consul') do
+    its(:exit_status) { should eq 0 }
+  end
+
+  # The logstash service should now be vanished since the Consul node is gone.
+  describe command('sleep 20 && curl -s -XGET http://consul-server:8500/v1/health/service/logstash?passing | jq -c ". | length"') do
+    its(:stdout) { should match(/0/) }
+  end
+
 
 end # describe 'docker-compose.yml run' do
